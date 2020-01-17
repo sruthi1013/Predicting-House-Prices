@@ -1,183 +1,59 @@
-# Project 2 - Ames Housing Data and Kaggle Challenge
+# Project 2: Prediction of House Prices
 
-Welcome to Project 2! It's time to start modeling.
+## Problem Statement
 
-**Primary Learning Objectives:**
-1. Creating and iteratively refining a regression model
-2. Using [Kaggle](https://www.kaggle.com/) to practice the modeling process
-3. Providing business insights through reporting and presentation.
+Zillow is trying to get the best estimates of house prices across the United States to gain an advantage in today's competitive real estate market.
 
-You are tasked with creating a regression model based on the Ames Housing Dataset. This model will predict the price of a house at sale.
+This proposal analyzes and models the Ames, Iowa housing data from 2006-2010, to get 'Zestimates' of the current house prices in Ames and obtain the most important features that influence the price, and provides recommendations to buyers on what factors to consider in order to get the best return on investment.
 
-The Ames Housing Dataset is an exceptionally detailed and robust dataset with over 70 columns of different features relating to houses.
+## Contents:
 
-Secondly, we are hosting a competition on Kaggle to give you the opportunity to practice the following skills:
+1. Data Cleaning
+2. Exploratory Data Analysis
+3. Feature Extraction/Analysis
+4. Modeling
+5. Conclusions
+6. Recommendations
+7. Next Steps
 
-- Refining models over time
-- Use of train-test split, cross-validation, and data with unknown values for the target to simulate the modeling process
-- The use of Kaggle as a place to practice data science
+## Models Summary
 
-As always, you will be submitting a technical report and a presentation. **You may find that the best model for Kaggle is not the best model to address your data science problem.**
+| Model                      	| Linear Regression-1                                                       	| Linear Regression-2                                                      	| Linear Regression-3                                                                                                              	| Linear Regression-4                                                                                                                              	|
+|----------------------------	|---------------------------------------------------------------------------	|--------------------------------------------------------------------------	|----------------------------------------------------------------------------------------------------------------------------------	|--------------------------------------------------------------------------------------------------------------------------------------------------	|
+| Description                	| Basic Features                                                            	| Log-transform of Sale Price                                              	| Polynomial Regression                                                                                                            	| Polynomial Regression                                                                                                                            	|
+| Feature-selection Method   	| Correlation Matrix                                                        	| Correlation Matrix                                                       	| Correlation Matrix                                                                                                               	| OLS Hypothesis Testing                                                                                                                           	|
+| Feature-selection Criteria 	| Corr. Coeff > 0.5                                                         	| Corr. Coeff > 0.                                                         	| Corr. Coeff > 0.75                                                                                                               	| p_value < 0.04                                                                                                                                   	|
+| Cross Validation Score     	| 0.860                                                                     	| 0.874                                                                    	| 0.868                                                                                                                            	| 0.872                                                                                                                                            	|
+| Training R2 Score          	| 0.866                                                                     	| 0.877                                                                    	| 0.878                                                                                                                            	| 0.861                                                                                                                                            	|
+| Testing R2 Score           	| 0.830                                                                     	| 0.828                                                                    	| 0.839                                                                                                                            	| 0.893                                                                                                                                            	|
+| Mean Absolute Error        	| 21793.57                                                                  	| 17937.42                                                                 	| 18629.20                                                                                                                         	| 16560.80                                                                                                                                         	|
+| Mean Squared Error         	| 902461306.37                                                              	| 649409460.87                                                             	| 721673753.42                                                                                                                     	| 524826604.87                                                                                                                                     	|
+| Root Mean Squared Error    	| 30040.99                                                                  	| 25483.51                                                                 	| 26863.97                                                                                                                         	| 22909.09                                                                                                                                         	|
+| Most important features    	| Overall qual<br>Ext qual<br>Gr liv area<br>Kitchen qual<br>Total bsmt SF  	| Overall qual<br>Ext qual<br>Gr liv area<br>Kitchen qual<br>Total bsmt SF 	| overall_qual gr_liv_area<br>overall_qual year_built<br>overall_qual garage_yr_blt<br>overall_qual year_remod/add<br>overall_qual 	| overall_qual garage_area<br>overall_qual garage_cars<br>overall_qual garage_yr_blt<br>1st_flr_sf garage_type_Detchd<br>garage_area garage_yr_blt 	|
+| Inference                  	| Slight overfitting                                                        	| Slight overfitting                                                       	| Slight overfitting                                                                                                               	| Slight underfitting                                                                                                                              	|
 
-## Set-up
+## CONCLUSIONS
+- Model 4 has the best R2 testing score, and is the best model for predicting house prices. This model uses polynomial features with feature selection using Hypothesis testing of OLS coefficients.
+- Although Model 4 has the best estimates, it's top features seem very counter-intuitive, since most of them are based on garage-values.
+- This is because OLS regression is very sensitive to outliers, and there are a few more outliers in the data which weren't removed in this preliminary model.
+- So, the most important features for prediction are the features which are common in both the OLS and correlation filters:
+    - Overall quality^2
+    - Overall quality * External quality
+    - Overall quality * Garage area
+    - Overall quality * Heating QC
+- Overall quality is the best predictor of house prices.
+- Neighborhood wasn't accounted for in any of the models, which also seems counter intuitive. So, some statistics of Sale Price based on Neighborhood have been included.
 
-Before you begin working on this project, please do the following:
 
-1. Sign up for an account on [Kaggle](https://www.kaggle.com/)
-2. **IMPORTANT**: Click this link ([Regression Challenge Sign Up](https://www.kaggle.com/t/49c5cfe498e84a94961382178fc4d264)) to **join** the competition (otherwise you will not be able to make submissions!)
-3. Review the material on the [DSI-US-10 Regression Challenge](https://www.kaggle.com/c/dsi-us-10-project-2-regression-challenge)
-4. Review the [data description](http://jse.amstat.org/v19n3/decock/DataDocumentation.txt).
+## RECOMMENDATIONS
+- Model 4 can be used to predict the house prices in Ames, and the above features can be given more weightage when recommending homes to buyers.
+- Apart from those features, up-and-coming neighborhoods(based on sale price trends) can also be recommended to get a higher return on investment.
 
-## The Modeling Process
 
-1. The train dataset has all of the columns that you will need to generate and refine your models. The test dataset has all of those columns except for the target that you are trying to predict in your Regression model.
-2. Generate your regression model using the training data. We expect that within this process, you'll be making use of:
-    - train-test split
-    - cross-validation / grid searching for hyperparameters
-    - strong exploratory data analysis to question correlation and relationship across predictive variables
-    - code that reproducibly and consistently applies feature transformation (such as the preprocessing library)
-3. Predict the values for your target column in the test dataset and submit your predictions to Kaggle to see how your model does against unknown data.
-    - **Note**: Kaggle expects to see your submissions in a specific format. Check the challenge's page to make sure you are formatting your CSVs correctly!
-    - **You are limited to models you've learned in class**. In other words, you cannot use XGBoost, Neural Networks or any other advanced model for this project.
-4. Evaluate your models!
-    - consider your evaluation metrics
-    - consider your baseline score
-    - how can your model be used for inference?
-    - why do you believe your model will generalize to new data?
+## NEXT STEPS
+- This is only a  preliminary model to be used to get a general idea of the house prices in Ames. A more accurate model can be built using the given data.
+- Analyze the data further and remove a few more outliers.
+- Deeper analysis of overall quality with other features.
+- Choose and scale some features as done with the target.
+- Use regularization to prevent overfitting.
 
-## Submission
-
-Materials must be submitted by the beginning of class on **Friday, January 17**.
-
-The last day for the Kaggle competition will be **Friday, January 17**.
-
-Your technical report will be hosted on Github Enterprise. Make sure it includes:
-
-- A README.md (that isn't this file)
-- Jupyter notebook(s) with your analysis and models (renamed to describe your project)
-- At least one successful prediction submission on [DSI-US-10 Regression Challenge](https://www.kaggle.com/c/dsi-us-10-project-2-regression-challenge) --  you should see your name in the "[Leaderboard](https://www.kaggle.com/c/dsi-us-10-project-2-regression-challenge/leaderboard)" tab.
-- Data files
-- Presentation slides
-- Any other necessary files (images, etc.)
-
-**Check with your local instructor for how they would like you to submit your repo for review.**
-
----
-
-## Presentation Structure
-
-- **Must be within time limit established by local instructor.**
-- Use Google Slides or some other visual aid (Keynote, Powerpoint, etc).
-- Consider the audience. **Check with your local instructor for direction**.
-- Start with the **data science problem**.
-- Use visuals that are appropriately scaled and interpretable.
-- Talk about your procedure/methodology (high level).
-- Talk about your primary findings.
-- Make sure you provide **clear recommendations** that follow logically from your analyses and narrative and answer your data science problem.
-
-Be sure to rehearse and time your presentation before class.
-
----
-
-## Rubric
-Your local instructor will evaluate your project (for the most part) using the following criteria.  You should make sure that you consider and/or follow most if not all of the considerations/recommendations outlined below **while** working through your project.
-
-**Scores will be out of 27 points based on the 9 items in the rubric.** <br>
-*3 points per section*<br>
-
-| Score | Interpretation |
-| --- | --- |
-| **0** | *Project fails to meet the minimum requirements for this item.* |
-| **1** | *Project meets the minimum requirements for this item, but falls significantly short of portfolio-ready expectations.* |
-| **2** | *Project exceeds the minimum requirements for this item, but falls short of portfolio-ready expectations.* |
-| **3** | *Project meets or exceeds portfolio-ready expectations; demonstrates a thorough understanding of every outlined consideration.* |
-
-### The Data Science Process
-
-**Problem Statement**
-- Is it clear what the student plans to do?
-- What type of model will be developed?
-- How will success be evaluated?
-- Is the scope of the project appropriate?
-- Is it clear who cares about this or why this is important to investigate?
-- Does the student consider the audience and the primary and secondary stakeholders?
-
-**Data Cleaning and EDA**
-- Are missing values imputed appropriately?
-- Are distributions examined and described?
-- Are outliers identified and addressed?
-- Are appropriate summary statistics provided?
-- Are steps taken during data cleaning and EDA framed appropriately?
-- Does the student address whether or not they are likely to be able to answer their problem statement with the provided data given what they've discovered during EDA?
-
-**Preprocessing and Modeling**
-- Are categorical variables one-hot encoded?
-- Does the student investigate or manufacture features with linear relationships to the target?
-- Have the data been scaled appropriately?
-- Does the student properly split and/or sample the data for validation/training purposes?
-- Does the student utilize feature selection to remove noisy or multi-collinear features?
-- Does the student test and evaluate a variety of models to identify a production algorithm (**AT MINIMUM:** linear regression, lasso, and ridge)?
-- Does the student defend their choice of production model relevant to the data at hand and the problem?
-- Does the student explain how the model works and evaluate its performance successes/downfalls?
-
-**Evaluation and Conceptual Understanding**
-- Does the student accurately identify and explain the baseline score?
-- Does the student select and use metrics relevant to the problem objective?
-- Is more than one metric utilized in order to better assess performance?
-- Does the student interpret the results of their model for purposes of inference?
-- Is domain knowledge demonstrated when interpreting results?
-- Does the student provide appropriate interpretation with regards to descriptive and inferential statistics?
-
-**Conclusion and Recommendations**
-- Does the student provide appropriate context to connect individual steps back to the overall project?
-- Is it clear how the final recommendations were reached?
-- Are the conclusions/recommendations clearly stated?
-- Does the conclusion answer the original problem statement?
-- Does the student address how findings of this research can be applied for the benefit of stakeholders?
-- Are future steps to move the project forward identified?
-
-### Organization and Professionalism
-
-**Project Organization**
-- Are modules imported correctly (using appropriate aliases)?
-- Are data imported/saved using relative paths?
-- Does the README provide a good executive summary of the project?
-- Is markdown formatting used appropriately to structure notebooks?
-- Are there an appropriate amount of comments to support the code?
-- Are files & directories organized correctly?
-- Are there unnecessary files included?
-- Do files and directories have well-structured, appropriate, consistent names?
-
-**Visualizations**
-- Are sufficient visualizations provided?
-- Do plots accurately demonstrate valid relationships?
-- Are plots labeled properly?
-- Are plots interpreted appropriately?
-- Are plots formatted and scaled appropriately for inclusion in a notebook-based technical report?
-
-**Python Syntax and Control Flow**
-- Is care taken to write human readable code?
-- Is the code syntactically correct (no runtime errors)?
-- Does the code generate desired results (logically correct)?
-- Does the code follows general best practices and style guidelines?
-- Are Pandas functions used appropriately?
-- Are `sklearn` methods used appropriately?
-
-**Presentation**
-- Is the problem statement clearly presented?
-- Does a strong narrative run through the presentation building toward a final conclusion?
-- Are the conclusions/recommendations clearly stated?
-- Is the level of technicality appropriate for the intended audience?
-- Is the student substantially over or under time?
-- Does the student appropriately pace their presentation?
-- Does the student deliver their message with clarity and volume?
-- Are appropriate visualizations generated for the intended audience?
-- Are visualizations necessary and useful for supporting conclusions/explaining findings?
-
-In order to pass the project, students must earn a minimum score of 1 for each category.
-- Earning below a 1 in one or more of the above categories would result in a failing project.
-- While a minimum of 1 in each category is the required threshold for graduation, students should aim to earn at least an average of 1.5 across each category. An average score below 1.5, while it may be passing, means students may want to solicit specific feedback in order to significantly improve the project before showcasing it as part of a portfolio or the job search.
-
-### REMEMBER:
-
-This is a learning environment and you are encouraged to try new things, even if they don't work out as well as you planned! While this rubric outlines what we look for in a _good_ project, it is up to you to go above and beyond to create a _great_ project. **Learn from your failures and you'll be prepared to succeed in the workforce**.
